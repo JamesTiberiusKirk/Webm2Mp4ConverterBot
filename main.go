@@ -36,15 +36,9 @@ func getConfig() (BotConf, error) {
 	}, nil
 }
 
-func checkFolders(store string, folder string) {
+func checkFolder(store string) {
 	if _, err := os.Stat(store); os.IsExist(err) {
 		err = os.Mkdir(store, 0755)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	if _, err := os.Stat(store + folder); os.IsNotExist(err) {
-		err = os.Mkdir(store+folder, 0755)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -58,8 +52,9 @@ func main() {
 		log.Fatal("No config")
 	}
 
-	checkFolders(botConf.Store, "webm")
-	checkFolders(botConf.Store, "mp4")
+	checkFolder(botConf.Store)
+	checkFolder(botConf.Store + "webm")
+	checkFolder(botConf.Store + "mp4")
 
 	b, err := tb.NewBot(tb.Settings{
 		Token:  botConf.TelegramToken,
