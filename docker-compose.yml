@@ -1,0 +1,8 @@
+services:
+    webm2mp4converterbot:
+        # image: webm2mp4converterbot:latest
+        build: .
+        volumes: 
+            - ./storage:/app/storage
+        env_file: 
+            - .env
