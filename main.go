@@ -37,6 +37,12 @@ func getConfig() (BotConf, error) {
 }
 
 func checkFolders(store string, folder string) {
+	if _, err := os.Stat(store); os.IsExist(err) {
+		err = os.Mkdir(store, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 	if _, err := os.Stat(store + folder); os.IsNotExist(err) {
 		err = os.Mkdir(store+folder, 0755)
 		if err != nil {
