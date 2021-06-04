@@ -12,7 +12,9 @@ import (
 )
 
 func webmToMp4(in string, out string) error {
-	return ffmpeg.Input(in, nil).Output(out, nil).Run()
+	command := ffmpeg.Input(in, nil).Output(out, nil)
+	log.Printf("[Ffmpeg Command]: %s", command.GetArgs())
+	return command.Run()
 }
 
 func controllerLog(controllerId string, m *tb.Message) {
