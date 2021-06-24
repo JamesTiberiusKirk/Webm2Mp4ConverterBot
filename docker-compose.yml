@@ -1,3 +1,4 @@
+version: "3.0"
 services:
     webm2mp4converterbot:
         # image: webm2mp4converterbot:latest

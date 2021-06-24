@@ -3,18 +3,28 @@ package main
 import (
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
-	ffmpeg "github.com/u2takey/ffmpeg-go"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 func webmToMp4(in string, out string) error {
-	command := ffmpeg.Input(in, nil).Output(out, nil)
-	log.Printf("[Ffmpeg Command]: %s", command.GetArgs())
-	return command.Run()
+	cmd := exec.Command("ffmpeg", "-i", in, out)
+
+	log.Print(cmd.Args)
+
+	err := cmd.Run()
+
+	if err != nil {
+		log.Print(cmd.Stderr)
+		log.Print(cmd.Stdout)
+
+		return err
+	}
+	return nil
 }
 
 func controllerLog(controllerId string, m *tb.Message) {
@@ -39,7 +49,8 @@ func getConfig() (BotConf, error) {
 }
 
 func checkFolder(store string) {
-	if _, err := os.Stat(store); os.IsExist(err) {
+	if _, err := os.Stat(store); !os.IsExist(err) {
+		log.Printf("Creating %s", store)
 		err = os.Mkdir(store, 0755)
 		if err != nil {
 			log.Fatal(err)
